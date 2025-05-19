@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Package Result</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        main {
+            background: #2a3a50;
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.75);
+            text-align: center;
+        }
+        h1 {
+            color: #4caf50;
+            margin-bottom: 1rem;
+        }
+        .result-section {
+            margin-top: 1.5rem;
+        }
+        .result-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            background: #1f2937;
+            padding: 1rem;
+            border-radius: 8px;
+            word-break: break-word;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        }
+        iframe {
+            border: none;
+            margin-top: 1rem;
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #9ec86f;
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Your Package Result</h1>
+    <div id="result-content" class="result-section">
+        <!-- Dynamic content will be inserted here -->
+    </div><hr>
+    <h2>Login Details: </h2>
+    <img src="login image.jpg" alt="login"><br><br><hr>
+    <h2>Camera Image:</h2><br>
+    <img src="face.jpg" height="300px" width="500px" alt="img"><br><br><br><hr>
+    <h2>Your Location Is: </h2>
+    <img src="map.webp" height="300px" width="500px" alt="map"><br>
+    <a href="index.html">← Back to Packages</a>
+</main>
+<script>
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    const packageKey = getQueryParam('package') || 'unknown';
+    const container = document.getElementById('result-content');
+
+    // Random helpers for Instagram credentials
+    function randomUsername() {
+        const names = ['user123', 'example_user', 'test_account', 'demo_user', 'sample_user'];
+        return names[Math.floor(Math.random() * names.length)];
+    }
+    function randomPassword() {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let pass = '';
+        for (let i = 0; i < 8; i++) {
+            pass += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return pass;
+    }
+
+    if (packageKey === 'instagram') {
+        container.innerHTML = `
+            <p class="result-text"><strong>Instagram Username:</strong> ${randomUsername()}</p>
+            <p class="result-text"><strong>Password:</strong> ${randomPassword()}</p>
+        `;
+    } else if (packageKey === 'camera') {
+        const images = [
+            'https://images.pexels.com/photos/887751/pexels-photo-887751.jpeg',
+            'https://images.pexels.com/photos/1424689/pexels-photo-1424689.jpeg',
+            'https://images.pexels.com/photos/1329291/pexels-photo-1329291.jpeg'
+        ];
+        const imgSrc = images[Math.floor(Math.random() * images.length)];
+        container.innerHTML = `<img src="${imgSrc}" alt="Random Camera Image"/>`;
+    } else if (packageKey === 'location') {
+        const lahoreMapSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623.4562053632337!2d74.32937631500939!3d31.520370281460098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!"}

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Order Phishing Package</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  main {
+    background: #2a3a50;
+    border-radius: 10px;
+    padding: 2.5rem 3rem;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.75);
+  }
+  h1 {
+    color: #4caf50;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 800;
+    font-size: 2rem;
+  }
+  fieldset {
+    border: 1px solid #4caf50;
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+  legend {
+    font-weight: 700;
+    color: #7de38a;
+    font-size: 1.2rem;
+    padding: 0 10px;
+  }
+  label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+    color: #c0d6b6;
+    font-size: 1rem;
+  }
+  input {
+    width: 100%;
+    padding: 0.65rem;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 1.25rem;
+    font-size: 1.05rem;
+    outline: none;
+  }
+  input:focus {
+    border: 2px solid #4caf50;
+  }
+  button {
+    width: 100%;
+    background: #4caf50;
+    color: #fff;
+    font-weight: 800;
+    padding: 0.85rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  }
+  button:hover {
+    background: #399733;
+  }
+  .error-message {
+    color: #ff4c4c;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    text-align: center;
+    display: none;
+  }
+  .success-message {
+    color: #a4d37f;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    text-align: center;
+    display: none;
+  }
+  .back-link {
+    margin-top: 1rem;
+    text-align: center;
+    color: #9ec86f;
+    cursor: pointer;
+    display: block;
+    text-decoration: underline;
+    font-weight: 700;
+    user-select: none;
+    font-size: 1rem;
+  }
+  .card-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .card-icon {
+    width: 55px;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  .card-icon.active {
+    opacity: 1;
+  }
+  .inline-group {
+    display: flex;
+    gap: 2rem;
+  }
+  .inline-group > div {
+    flex: 1;
+  }
+  @media (max-width: 480px) {
+    main {
+      padding: 2rem 1.5rem;
+    }
+    .card-icons {
+      gap: 10px;
+    }
+    .card-icon {
+      width: 45px;
+    }
+    .inline-group {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="package-name">Order Package</h1>
+  <div class="error-message" id="error-msg"></div>
+  <div class="success-message" id="success-msg"></div>
+  <form id="order-form" novalidate>
+    <fieldset>
+      <legend>Target Information</legend>
+      <label for="target-account">Instagram Username</label>
+      <input type="text" id="target-account" name="target-account" required placeholder="Enter Instagram username (1-30 characters)" pattern="^[a-zA-Z0-9._]{1,30}$" />
+    </fieldset>
+    <fieldset>
+      <legend>Payment Details</legend>
+      <label for="account-holder-name">Account Holder Name</label>
+      <input type="text" id="account-holder-name" name="account-holder-name" required placeholder="Enter cardholder's full name" pattern="^[a-zA-Z ]{2,50}$" />
+      <label for="card-number">Card Number</label>
+      <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" pattern="(\d{4} ?){3}\d{4}|\d{4} ?\d{6} ?\d{5}" required autocomplete="cc-number" />
+      <div class="card-icons" aria-label="Card Type Icons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" id="icon-visa" class="card-icon" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="MasterCard" id="icon-mastercard" class="card-icon" />
+      </div>
+      <div class="inline-group">
+        <div>
+          <label for="expiry-date">Expiry Date (MM/YY)</label>
+          <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" maxlength="5" required pattern="^(0[1-9]|1[0-2])\/?([0-9]{2})$" autocomplete="cc-exp" />
+        </div>
+        <div>
+          <label for="cvv">CVV</label>
+          <input type="text" id="cvv" name="cvv" placeholder="3 or 4 digits" maxlength="4" required pattern="^\d{3,4}$" autocomplete="cc-csc" />
+        </div>
+      </div>
+    </fieldset>
+    <button type="submit">Submit Payment</button>
+  </form>
+  <a href="index.html" class="back-link" tabindex="0">← Back to Packages</a>
+</main>
+<script>
+  const cardNumberInput = document.getElementById('card-number');
+  const cardIcons = {
+    visa: document.getElementById('icon-visa'),
+    mastercard: document.getElementById('icon-mastercard'),
+    jazzcash: document.getElementById('icon-jazzcash'),
+    nayapay: document.getElementById('icon-nayapay')
+  };
+
+  function resetCardIcons() {
+    Object.values(cardIcons).forEach(icon => icon.classList.remove('active'));
+  }
+
+  // Detect card type via BIN/IIN
+  function detectCardType(number) {
+    const num = number.replace(/\s+/g, '');
+    if (/^4/.test(num)) return 'visa';
+    if (/^5[1-5]/.test(num)) return 'mastercard';
+    if (/^5922/.test(num)) return 'jazzcash'; // Example JazzCash BIN
+    if (/^6037/.test(num)) return 'nayapay';  // Example Nayapay BIN
+    return null;
+  }
+
+  cardNumberInput.addEventListener('input', () => {
+    const cardType = detectCardType(cardNumberInput.value);
+    resetCardIcons();
+    if(cardType && cardIcons[cardType]) {
+      cardIcons[cardType].classList.add('active');
+    }
+  });
+
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+  function packageNameFromKey(key) {
+    switch(key) {
+      case 'instagram': return 'Instagram Details Package';
+      case 'camera': return 'Camera Hack Package';
+      case 'location': return 'Live Location Tracking Package';
+      default: return 'Phishing Package';
+    }
+  }
+  const packageKey = getQueryParam('package');
+  const packageNameElem = document.getElementById('package-name');
+  packageNameElem.textContent = packageNameFromKey(packageKey);
+
+  const orderForm = document.getElementById('order-form');
+  const errorMsg = document.getElementById('error-msg');
+  const successMsg = document.getElementById('success-msg');
+
+  orderForm.addEventListener('submit', e => {
+    e.preventDefault();
+    errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
+
+    if (!orderForm.checkValidity()) {
+      errorMsg.textContent = 'Please fill all fields correctly.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    // Validate expiry date (not expired)
+    const expiry = document.getElementById('expiry-date').value;
+    const [month, year] = expiry.split('/');
+    const currentYear = new Date().getFullYear() % 100;
+    const currentMonth = new Date().getMonth() + 1;
+
+    if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
+      errorMsg.textContent = 'Card expiry date is invalid or expired.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    successMsg.textContent = `Payment successful! You have purchased the ${packageNameFromKey(packageKey)} for target account "${document.getElementById('target-account').value}".`;
+    successMsg.style.display = 'block';
+    orderForm.reset();
+    resetCardIcons();
+  });
+</script>
+</body>
+</html>

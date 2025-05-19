@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Phishing Software Packages - Login & Registration</title>
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding: 1.5rem;
+    text-align: center;
+    background: #1f2937;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+  header h1 {
+    margin: 0;
+    color: #4caf50;
+    font-weight: 700;
+  }
+  main {
+    flex: 1 0 auto;
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto 3rem;
+    background: #2a3a50;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+    overflow: hidden;
+    padding: 0 15px;
+  }
+  .container {
+    padding: 2rem 0;
+  }
+  #auth-section {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  input[type="text"], input[type="password"], input[type="email"] {
+    padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+  }
+  input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+    border: 2px solid #4caf50;
+  }
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 0.7rem;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    fill: #999;
+    cursor: pointer;
+  }
+  .toggle-password:hover {
+    fill: #4caf50;
+  }
+  button {
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #399733;
+  }
+  .toggle-link {
+    margin-top: 1rem;
+    text-align: center;
+    color: #9ec86f;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+  }
+  .error-message {
+    background: #e14c4c;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+  }
+  #content-section {
+    display: none;
+  }
+  #welcome-msg {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #a4d37f;
+  }
+  .package-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+    gap: 2.5rem;
+    width: 100%;
+  }
+  .package-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #1f2937;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .package-link:hover,
+  .package-link:focus {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.9);
+    outline: none;
+  }
+  .package-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
+  }
+  .package-content {
+    padding: 1.25rem 1.5rem 2rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .package-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #7de38a;
+  }
+  .package-desc {
+    flex-grow: 1;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    color: #c0d6b6;
+  }
+  .package-price {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #e3eaa7;
+  }
+  #logout-btn {
+    margin: 2rem auto 1rem;
+    display: block;
+    background: #d9534f;
+    font-size: 1.2rem;
+    width: 180px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+  #logout-btn:hover {
+    background: #bf2e28;
+  }
+  @media (max-width: 768px) {
+    main {
+      max-width: 95%;
+      margin: 1rem auto 2rem;
+    }
+    .package-list {
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 1.8rem;
+    }
+    .package-image {
+      height: 200px;
+    }
+  }
+  @media (max-width: 480px) {
+    .container {
+      padding: 1rem 1.5rem 2rem;
+    }
+    .package-list {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .package-image {
+      height: 160px;
+    }
+    #logout-btn {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Phishing Software Packages</h1>
+</header>
+<main>
+<section id="auth-section" class="container" aria-label="Authentication Section">
+  <form id="login-form" aria-label="Login Form" style="display:flex; flex-direction: column;">
+    <h2>Login</h2>
+    <div class="error-message" id="login-error" style="display:none;"></div>
+    <label for="login-username">Username</label>
+    <input type="text" id="login-username" autocomplete="username" required />
+    <div class="input-wrapper">
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" autocomplete="current-password" required />
+      <svg class="toggle-password" id="toggle-login-password" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-label="Toggle password visibility" tabindex="0" role="button" >
+        <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/>
+        <circle cx="12" cy="12" r="2.5"/>
+      </svg>
+    </div>
+    <button type="submit" aria-label="Login Button">Login</button>
+    <div class="toggle-link" id="show-register" tabindex="0">Don't have an account? Register here</div>
+  </form>
+  <form id="register-form" aria-label="Registration Form" style="display:none; flex-direction: column;">
+    <h2>Register</h2>
+    <div class="error-message" id="register-error" style="display:none;"></div>
+    <label for="register-username">Username</label>
+    <input type="text" id="register-username" autocomplete="username" required />
+    <div class="input-wrapper">
+      <label for="register-password">Password</label>
+      <input type="password" id="register-password" autocomplete="new-password" required />
+      <svg class="toggle-password" id="toggle-register-password" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-label="Toggle password visibility" tabindex="0" role="button" >
+        <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/>
+        <circle cx="12" cy="12" r="2.5"/>
+      </svg>
+    </div>
+    <div class="input-wrapper">
+      <label for="register-password-confirm">Confirm Password</label>
+      <input type="password" id="register-password-confirm" autocomplete="new-password" required />
+      <svg class="toggle-password" id="toggle-register-password-confirm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-label="Toggle password visibility" tabindex="0" role="button" >
+        <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/>
+        <circle cx="12" cy="12" r="2.5"/>
+      </svg>
+    </div>
+    <button type="submit" aria-label="Register Button">Register</button>
+    <div class="toggle-link" id="show-login" tabindex="0">Already have an account? Login here</div>
+  </form>
+</section>
+<section id="content-section" class="container" aria-label="Main Content">
+  <div id="welcome-msg"></div>
+  <div class="package-list" aria-label="Available Packages">
+    <a href="order.html?package=instagram" class="package-link" tabindex="0" aria-label="Instagram Details Package">
+      <img src="https://img.freepik.com/premium-vector/instagram-social-media-mobile-login-screen-page-template_539007-138.jpg?w=740" alt="Instagram login clone screen" class="package-image" />
+      <div class="package-content">
+        <h3 class="package-title">Instagram Details Package</h3>
+        <p class="package-desc">Obtain Instagram credentials through a cloned login page</p>
+        <p class="package-price">$99.99</p>
+      </div>
+    </a>
+    <a href="order.html?package=camera" class="package-link" tabindex="0" aria-label="Camera Hack Package">
+      <img src="https://media.istockphoto.com/id/1266982535/photo/man-having-video-call-on-digital-tablet.jpg?s=612x612&w=is&k=20&c=Z_XdSlHBUGWicliB7S3sg61Jlt0c8xiQfl79IITw1O0=" alt="Camera image illustration" class="package-image" />
+      <div class="package-content">
+        <h3 class="package-title">Camera Hack Package</h3>
+        <p class="package-desc">Capture images or videos remotely via malware links</p>
+        <p class="package-price">$149.99</p>
+      </div>
+    </a>
+    <a href="order.html?package=location" class="package-link" tabindex="0" aria-label="Live Location Tracking Package">
+      <img src="https://t4.ftcdn.net/jpg/02/69/55/79/360_F_269557975_05TUG0HVQuXNjDxnG4KbRO5AWjwTn0qd.jpg" alt="Random address on map" class="package-image" />
+      <div class="package-content">
+        <h3 class="package-title">Live Location Tracking Package</h3>
+        <p class="package-desc">Track live location silently when victim opens the provided link</p>
+        <p class="package-price">$129.99</p>
+      </div>
+    </a>
+  </div>
+  <button id="logout-btn" aria-label="Logout Button">Logout</button>
+</section>
+</main>
+<script>
+  // Elements
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+  const showRegisterLink = document.getElementById('show-register');
+  const showLoginLink = document.getElementById('show-login');
+  const authSection = document.getElementById('auth-section');
+  const contentSection = document.getElementById('content-section');
+  const welcomeMsg = document.getElementById('welcome-msg');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  const loginError = document.getElementById('login-error');
+  const registerError = document.getElementById('register-error');
+
+  // Password toggle
+  function setupPasswordToggle(inputId, toggleId) {
+    const input = document.getElementById(inputId);
+    const toggle = document.getElementById(toggleId);
+    toggle.addEventListener('click', () => {
+      if(input.type === 'password') {
+        input.type = 'text';
+        toggle.style.fill = '#4caf50';
+      } else {
+        input.type = 'password';
+        toggle.style.fill = '#999';
+      }
+    });
+    toggle.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle.click();
+      }
+    });
+  }
+  setupPasswordToggle('login-password', 'toggle-login-password');
+  setupPasswordToggle('register-password', 'toggle-register-password');
+  setupPasswordToggle('register-password-confirm', 'toggle-register-password-confirm');
+
+  // Toggle forms
+  showRegisterLink.addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'flex';
+    loginError.style.display = 'none';
+    registerError.style.display = 'none';
+  });
+  showRegisterLink.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' || e.key === ' ') {
+      showRegisterLink.click();
+      e.preventDefault();
+    }
+  });
+  showLoginLink.addEventListener('click', () => {
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'flex';
+    loginError.style.display = 'none';
+    registerError.style.display = 'none';
+  });
+  showLoginLink.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' || e.key === ' ') {
+      showLoginLink.click();
+      e.preventDefault();
+    }
+  });
+
+  // Utilities
+  function getUsers() {
+    const users = localStorage.getItem('users');
+    return users ? JSON.parse(users) : {};
+  }
+  function saveUser(username, password) {
+    const users = getUsers();
+    users[username] = password;
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
+  function validateUsername(username) {
+    return /^[a-zA-Z0-9_]{3,20}$/.test(username);
+  }
+  function validatePassword(password) {
+    return password.length >= 6;
+  }
+
+  // Registration handler
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    registerError.style.display = 'none';
+    const username = document.getElementById('register-username').value.trim();
+    const password = document.getElementById('register-password').value;
+    const passConfirm = document.getElementById('register-password-confirm').value;
+
+    if (!validateUsername(username)) {
+      registerError.textContent = 'Username must be 3-20 characters, letters, numbers, or underscores only.';
+      registerError.style.display = 'block';
+      return;
+    }
+    if (!validatePassword(password)) {
+      registerError.textContent = 'Password must be at least 6 characters.';
+      registerError.style.display = 'block';
+      return;
+    }
+    if (password !== passConfirm) {
+      registerError.textContent = 'Passwords do not match.';
+      registerError.style.display = 'block';
+      return;
+    }
+    const users = getUsers();
+    if (users[username]) {
+      registerError.textContent = 'Username already exists.';
+      registerError.style.display = 'block';
+      return;
+    }
+    saveUser(username, password);
+    // Auto-login after registration
+    loginUser(username);
+  });
+
+  // Login handler
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    loginError.style.display = 'none';
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    if (!validateUsername(username)) {
+      loginError.textContent = 'Invalid username format.';
+      loginError.style.display = 'block';
+      return;
+    }
+    if (!validatePassword(password)) {
+      loginError.textContent = 'Invalid password.';
+      loginError.style.display = 'block';
+      return;
+    }
+    const users = getUsers();
+    if (!users[username] || users[username] !== password) {
+      loginError.textContent = 'Incorrect username or password.';
+      loginError.style.display = 'block';
+      return;
+    }
+    loginUser(username);
+  });
+
+  // Login user and show content
+  function loginUser(username){
+    localStorage.setItem('loggedInUser', username);
+    welcomeMsg.textContent = `Welcome, ${username}! Here are our available packages:`;
+    authSection.style.display = 'none';
+    contentSection.style.display = 'block';
+  }
+
+  // Logout
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('loggedInUser');
+    authSection.style.display = 'block';
+    contentSection.style.display = 'none';
+    loginForm.reset();
+    registerForm.reset();
+    loginError.style.display = 'none';
+    registerError.style.display = 'none';
+  });
+
+  // On page load, check if logged in
+  document.addEventListener('DOMContentLoaded', () => {
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if(loggedInUser){
+      loginUser(loggedInUser);
+    }
+  });
+</script>
+</body>
+</html>
